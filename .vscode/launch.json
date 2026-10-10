@@ -1,0 +1,114 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Config Server",
+      "request": "launch",
+      "mainClass": "ru.cineflow.config.ConfigServerApplication",
+      "projectName": "config-server",
+      "cwd": "${workspaceFolder}/config-server"
+    },
+    {
+      "type": "java",
+      "name": "Eureka Server",
+      "request": "launch",
+      "mainClass": "ru.cineflow.eureka.EurekaServerApplication",
+      "projectName": "eureka-server",
+      "cwd": "${workspaceFolder}/eureka-server"
+    },
+    {
+      "type": "java",
+      "name": "Gateway",
+      "request": "launch",
+      "mainClass": "ru.cineflow.gateway.GatewayApplication",
+      "projectName": "gateway",
+      "cwd": "${workspaceFolder}/gateway"
+    },
+    {
+      "type": "java",
+      "name": "Movie Service",
+      "request": "launch",
+      "mainClass": "ru.cineflow.movie.MovieServiceApplication",
+      "projectName": "movie-service",
+      "cwd": "${workspaceFolder}/movie-service"
+    },
+    {
+      "type": "java",
+      "name": "Booking Service",
+      "request": "launch",
+      "mainClass": "ru.cineflow.booking.BookingServiceApplication",
+      "projectName": "booking-service",
+      "cwd": "${workspaceFolder}/booking-service"
+    },
+    {
+      "type": "java",
+      "name": "Pricing Service",
+      "request": "launch",
+      "mainClass": "ru.cineflow.pricing.PricingServiceApplication",
+      "projectName": "pricing-service",
+      "cwd": "${workspaceFolder}/pricing-service"
+    },
+    {
+      "type": "java",
+      "name": "Payment Service",
+      "request": "launch",
+      "mainClass": "ru.cineflow.payment.PaymentServiceApplication",
+      "projectName": "payment-service",
+      "cwd": "${workspaceFolder}/payment-service"
+    },
+    {
+      "type": "java",
+      "name": "User Service",
+      "request": "launch",
+      "mainClass": "ru.cineflow.user.UserServiceApplication",
+      "projectName": "user-service",
+      "cwd": "${workspaceFolder}/user-service"
+    },
+    {
+      "type": "java",
+      "name": "Concession Service",
+      "request": "launch",
+      "mainClass": "ru.cineflow.bar.ConcessionServiceApplication",
+      "projectName": "concession-service",
+      "cwd": "${workspaceFolder}/concession-service"
+    },
+    {
+      "type": "java",
+      "name": "Notification Service",
+      "request": "launch",
+      "mainClass": "ru.cineflow.notification.NotificationServiceApplication",
+      "projectName": "notification-service",
+      "cwd": "${workspaceFolder}/notification-service"
+    },
+    {
+      "type": "debugpy",
+      "name": "Telegram Bot (Python)",
+      "request": "launch",
+      "module": "bot.main",
+      "cwd": "${workspaceFolder}/telegram-bot",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "API_URL": "http://localhost:8080",
+        "KAFKA": "localhost:29092"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "▶ Все Spring-сервисы",
+      "configurations": [
+        "Config Server",
+        "Eureka Server",
+        "Gateway",
+        "Movie Service",
+        "Booking Service",
+        "Pricing Service",
+        "Payment Service",
+        "User Service",
+        "Concession Service",
+        "Notification Service"
+      ]
+    }
+  ]
+}

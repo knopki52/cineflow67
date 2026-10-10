@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFB3D6"/><stop offset="1" stop-color="#E25C9A"/></linearGradient>
+<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.6"/></linearGradient></defs>
+<rect width="400" height="600" fill="url(#g)"/>
+<circle cx="200" cy="240" r="130" fill="#fff" opacity="0.35"/><circle cx="200" cy="240" r="95" fill="#FF7EB8"/><path d="M80 88 L84 96 L92 100 L84 104 L80 112 L76 104 L68 100 L76 96Z" fill="#fff"/><path d="M330 128 L334 136 L342 140 L334 144 L330 152 L326 144 L318 140 L326 136Z" fill="#fff"/><path d="M300 368 L304 376 L312 380 L304 384 L300 392 L296 384 L288 380 L296 376Z" fill="#fff"/><path d="M90 348 L94 356 L102 360 L94 364 L90 372 L86 364 L78 360 L86 356Z" fill="#fff"/><path d="M200 78 L204 86 L212 90 L204 94 L200 102 L196 94 L188 90 L196 86Z" fill="#fff"/>
+<rect width="400" height="600" fill="url(#fade)"/>
+<text x="28" y="44" font-family="Manrope, Arial, sans-serif" font-size="14" letter-spacing="2" fill="#FFFFFF" opacity="0.75">КОМЕДИЯ · 2023</text>
+<text x="28" y="560" font-family="Unbounded, Arial Black, sans-serif" font-weight="800" font-size="32" fill="#FFFFFF">Барби</text>
+</svg>

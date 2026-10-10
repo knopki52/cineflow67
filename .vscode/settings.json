@@ -1,0 +1,8 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "disabled",
+  "files.encoding": "utf8",
+  "files.exclude": { "**/target": true, "**/__pycache__": true },
+  "python.defaultInterpreterPath": "telegram-bot/.venv/Scripts/python.exe",
+  "yaml.schemas": {}
+}

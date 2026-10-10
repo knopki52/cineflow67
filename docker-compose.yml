@@ -1,0 +1,172 @@
+# CineFlow: полный запуск одной командой
+#   docker compose up --build
+# Сайт: http://localhost:8080   Eureka: http://localhost:8761   Почта: http://localhost:8025
+
+x-java: &java
+  restart: unless-stopped
+  environment: &java-env
+    CONFIG_URL: http://config-server:8888
+    EUREKA_URL: http://eureka-server:8761/eureka
+    DB_HOST: postgres
+    REDIS_HOST: redis
+    KAFKA: kafka:9092
+    MAIL_HOST: mailhog
+    JAVA_OPTS: -Xms64m -Xmx300m -XX:+UseSerialGC -XX:TieredStopAtLevel=1
+  volumes:
+    - ./logs:/app/logs
+  depends_on: &java-deps
+    config-server: { condition: service_healthy }
+    eureka-server: { condition: service_healthy }
+    postgres: { condition: service_healthy }
+    kafka: { condition: service_started }
+
+services:
+  # ---------- Инфраструктура ----------
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: cineflow
+      POSTGRES_PASSWORD: cineflow
+      POSTGRES_DB: cineflow
+    ports: ["5432:5432"]
+    volumes:
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cineflow"]
+      interval: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  kafka:
+    image: apache/kafka:3.8.0
+    ports: ["29092:29092"]
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,EXTERNAL://:29092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  mailhog:
+    # Mailpit — замена MailHog, работает и на Mac с процессором Apple (M1/M2/M3)
+    image: axllent/mailpit
+    ports: ["8025:8025", "1025:1025"]
+
+  # ---------- Spring Cloud ----------
+  config-server:
+    build: ./config-server
+    restart: unless-stopped
+    ports: ["8888:8888"]
+    environment:
+      CONFIG_LOCATION: file:/config-repo
+      JAVA_OPTS: -Xms64m -Xmx200m -XX:+UseSerialGC -XX:TieredStopAtLevel=1
+    volumes:
+      - ./config-repo:/config-repo
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8888'"]
+      interval: 5s
+      retries: 40
+
+  eureka-server:
+    build: ./eureka-server
+    restart: unless-stopped
+    ports: ["8761:8761"]
+    environment:
+      JAVA_OPTS: -Xms64m -Xmx200m -XX:+UseSerialGC -XX:TieredStopAtLevel=1
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8761'"]
+      interval: 5s
+      retries: 40
+
+  gateway:
+    <<: *java
+    build: ./gateway
+    ports: ["8080:8080"]
+    environment:
+      <<: *java-env
+    depends_on:
+      config-server: { condition: service_healthy }
+      eureka-server: { condition: service_healthy }
+
+  # ---------- Бизнес-сервисы ----------
+  movie-service:
+    <<: *java
+    build: ./movie-service
+    ports: ["8081:8081"]
+
+  booking-service:
+    <<: *java
+    build: ./booking-service
+    ports: ["8082:8082"]
+    depends_on:
+      <<: *java-deps
+      redis: { condition: service_started }
+
+  # второй экземпляр бронирования: Eureka + Gateway балансируют нагрузку между ними
+  booking-service-2:
+    <<: *java
+    build: ./booking-service
+    profiles: ["scale"]
+    depends_on:
+      <<: *java-deps
+      redis: { condition: service_started }
+
+  pricing-service:
+    <<: *java
+    build: ./pricing-service
+    ports: ["8083:8083"]
+
+  payment-service:
+    <<: *java
+    build: ./payment-service
+    ports: ["8084:8084"]
+
+  user-service:
+    <<: *java
+    build: ./user-service
+    ports: ["8085:8085"]
+    environment:
+      <<: *java-env
+      BOT_USERNAME: ${BOT_USERNAME:-cineflow_demo_bot}
+
+  concession-service:
+    <<: *java
+    build: ./concession-service
+    ports: ["8086:8086"]
+
+  notification-service:
+    <<: *java
+    build: ./notification-service
+    ports: ["8087:8087"]
+    depends_on:
+      <<: *java-deps
+      mailhog: { condition: service_started }
+
+  # ---------- Telegram-бот (Python) ----------
+  telegram-bot:
+    build: ./telegram-bot
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      API_URL: http://gateway:8080
+      KAFKA: kafka:9092
+    depends_on:
+      - gateway
+      - kafka
+
+volumes:
+  pgdata:

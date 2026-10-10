@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1A1D17"/><stop offset="1" stop-color="#4A5240"/></linearGradient>
+<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.6"/></linearGradient></defs>
+<rect width="400" height="600" fill="url(#g)"/>
+<path d="M20 280 L 28 309.9 L 36 315.4 L 44 294.8 L 52 265.5 L 60 249.8 L 68 257.5 L 76 280.5 L 84 300.2 L 92 302.9 L 100 289.0 L 108 270.8 L 116 262.2 L 124 267.5 L 132 280.5 L 140 290.2 L 148 290.5 L 156 283.6 L 164 276.6 L 172 274.6 L 180 277.3 L 188 280.1 L 196 280.0 L 204 280.0 L 212 280.0 L 220 280.0 L 228 280.0 L 236 280.0 L 244 280.0 L 252 280.0 L 260 280.0 L 268 280.0 L 276 280.0 L 284 280.0 L 292 280.0 L 300 280.0 L 308 280.0 L 316 280.0 L 324 280.0 L 332 280.0 L 340 280.0 L 348 280.0 L 356 280.0 L 364 280.0 L 372 280.0 L 380 280.0" fill="none" stroke="#D9E0C8" stroke-width="3"/><circle cx="330" cy="150" r="40" fill="#D9E0C8" opacity="0.12"/>
+<rect width="400" height="600" fill="url(#fade)"/>
+<text x="28" y="44" font-family="Manrope, Arial, sans-serif" font-size="14" letter-spacing="2" fill="#FFF6E8" opacity="0.75">УЖАСЫ · 2018</text>
+<text x="28" y="560" font-family="Unbounded, Arial Black, sans-serif" font-weight="800" font-size="32" fill="#FFF6E8">Тихое место</text>
+</svg>

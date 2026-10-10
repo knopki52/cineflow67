@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1A0B16">
+  <title>CineFlow — сеть кинотеатров</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/css/app.css">
+  <script>
+    // тема применяется до отрисовки, чтобы не было вспышки
+    try { const t = localStorage.getItem('cf-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Перейти к содержимому</a>
+  <header class="topbar">
+    <a class="logo" href="#/" aria-label="CineFlow, на главную">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 46 Q32 10 54 46" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><circle cx="32" cy="48" r="6" fill="currentColor"/></svg>
+      <span>CineFlow</span>
+    </a>
+    <button class="city-btn" id="cityBtn" aria-haspopup="listbox"><span id="cityName">Москва</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+    <nav class="nav" id="nav">
+      <a href="#/" data-route="home">Афиша</a>
+      <a href="#/assistant" data-route="assistant">Ассистент</a>
+      <a href="#/map" data-route="map">Кинотеатры</a>
+      <a href="#/tickets" data-route="tickets">Мои билеты</a>
+      <a href="#/admin" data-route="admin" class="staff" data-roles="ADMIN" hidden>Админка</a>
+      <a href="#/bar" data-route="bar" class="staff" data-roles="ADMIN,BAR" hidden>Бар</a>
+      <a href="#/control" data-route="control" class="staff" data-roles="ADMIN,CONTROLLER" hidden>Контроль</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeBtn" aria-label="Сменить тему">
+        <svg viewBox="0 0 24 24" class="i-moon" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
+        <svg viewBox="0 0 24 24" class="i-sun" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></svg>
+      </button>
+      <button class="profile-btn" id="profileBtn">Войти</button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1"></main>
+
+  <nav class="tabbar" aria-label="Навигация">
+    <a href="#/" data-route="home"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 9h18" stroke="currentColor" stroke-width="2"/></svg>Афиша</a>
+    <a href="#/assistant" data-route="assistant"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Ассистент</a>
+    <a href="#/map" data-route="map"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg>Карта</a>
+    <a href="#/tickets" data-route="tickets"><svg viewBox="0 0 24 24"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="2"/></svg>Билеты</a>
+    <a href="#/profile" data-route="profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21a8 8 0 0 1 16 0" fill="none" stroke="currentColor" stroke-width="2"/></svg>Профиль</a>
+  </nav>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <div id="cursorDot" class="cursor-dot" aria-hidden="true"><span class="cursor-label"></span></div>
+  <div id="lights" class="lights" aria-hidden="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/colorthief@2.4.0/dist/color-thief.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="/js/core.js"></script>
+  <script src="/js/effects.js"></script>
+  <script src="/js/pages-catalog.js"></script>
+  <script src="/js/hall.js"></script>
+  <script src="/js/pages-user.js"></script>
+  <script src="/js/pages-staff.js"></script>
+  <script>CF.start();</script>
+</body>
+</html>

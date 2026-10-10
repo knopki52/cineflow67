@@ -1,0 +1,29 @@
+spring:
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: 1025
+notification:
+  from: tickets@cineflow.ru
+
+# Circuit Breaker (Resilience4j) для вызовов других сервисов
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        minimum-number-of-calls: 4
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 15s
+        permitted-number-of-calls-in-half-open-state: 2
+        automatic-transition-from-open-to-half-open-enabled: true
+        register-health-indicator: true
+        ignore-exceptions:
+          - feign.FeignException$FeignClientException
+    instances:
+      movie: { base-config: default }
+      pricing: { base-config: default }
+      payment: { base-config: default }
+      concession: { base-config: default }
+      user: { base-config: default }
+      booking: { base-config: default }
+

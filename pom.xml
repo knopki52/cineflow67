@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Корневой POM-агрегатор: нужен, чтобы VS Code увидел все сервисы как один проект -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ru.cineflow</groupId>
+    <artifactId>cineflow</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>config-server</module>
+        <module>eureka-server</module>
+        <module>gateway</module>
+        <module>movie-service</module>
+        <module>booking-service</module>
+        <module>pricing-service</module>
+        <module>payment-service</module>
+        <module>user-service</module>
+        <module>concession-service</module>
+        <module>notification-service</module>
+    </modules>
+</project>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1C262E"/><stop offset="1" stop-color="#3A4E5C"/></linearGradient>
+<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.6"/></linearGradient></defs>
+<rect width="400" height="600" fill="url(#g)"/>
+<rect x="20" y="60" width="50" height="180" fill="#5C7484" opacity="0.8" transform="rotate(180 200 300)"/><rect x="80" y="40" width="40" height="200" fill="#4A6070" opacity="0.8" transform="rotate(180 200 300)"/><rect x="130" y="80" width="60" height="160" fill="#6B8595" opacity="0.8" transform="rotate(180 200 300)"/><rect x="210" y="50" width="45" height="190" fill="#4A6070" opacity="0.8" transform="rotate(180 200 300)"/><rect x="270" y="70" width="55" height="170" fill="#5C7484" opacity="0.8" transform="rotate(180 200 300)"/><rect x="340" y="40" width="40" height="200" fill="#6B8595" opacity="0.8" transform="rotate(180 200 300)"/><g transform="translate(200 380)"><path d="M-40 -10 L40 -10 L0 60Z" fill="#C9D3D9"/><ellipse cx="0" cy="-10" rx="40" ry="10" fill="#E8EEF1"/><rect x="-4" y="-40" width="8" height="30" fill="#C9D3D9"/></g>
+<rect width="400" height="600" fill="url(#fade)"/>
+<text x="28" y="44" font-family="Manrope, Arial, sans-serif" font-size="14" letter-spacing="2" fill="#FFF6E8" opacity="0.75">ТРИЛЛЕР · 2010</text>
+<text x="28" y="560" font-family="Unbounded, Arial Black, sans-serif" font-weight="800" font-size="32" fill="#FFF6E8">Начало</text>
+</svg>

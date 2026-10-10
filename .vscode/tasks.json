@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "🚀 Запустить всё (Docker)", "type": "shell", "command": "docker compose up --build -d", "problemMatcher": [] },
+    { "label": "🧱 Только инфраструктура (Postgres, Redis, Kafka, MailHog)", "type": "shell", "command": "docker compose up -d postgres redis kafka mailhog", "problemMatcher": [] },
+    { "label": "📜 Логи всех сервисов", "type": "shell", "command": "docker compose logs -f --tail=50", "problemMatcher": [] },
+    { "label": "⚖️ Второй экземпляр booking-service", "type": "shell", "command": "docker compose --profile scale up -d booking-service-2", "problemMatcher": [] },
+    { "label": "💥 Уронить бар (демо Circuit Breaker)", "type": "shell", "command": "docker compose stop concession-service", "problemMatcher": [] },
+    { "label": "🩹 Поднять бар", "type": "shell", "command": "docker compose start concession-service", "problemMatcher": [] },
+    { "label": "🔁 Пересобрать один сервис", "type": "shell", "command": "docker compose up -d --build ${input:service}", "problemMatcher": [] },
+    { "label": "⏹ Остановить всё", "type": "shell", "command": "docker compose down", "problemMatcher": [] },
+    { "label": "🧹 Остановить и стереть данные", "type": "shell", "command": "docker compose down -v", "problemMatcher": [] }
+  ],
+  "inputs": [
+    { "id": "service", "type": "pickString", "description": "Какой сервис пересобрать?",
+      "options": ["gateway", "movie-service", "booking-service", "pricing-service", "payment-service", "user-service", "concession-service", "notification-service", "telegram-bot"] }
+  ]
+}

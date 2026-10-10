@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/user_db
+
+loyalty:
+  base-percent: 5
+  silver-percent: 7
+  gold-percent: 10
+  silver-threshold: 3000
+  gold-threshold: 8000
+  bot-username: ${BOT_USERNAME:cineflow_demo_bot}

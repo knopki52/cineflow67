@@ -1,0 +1,18 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          # Локально (VS Code) читаем ../config-repo, в Docker — смонтированную папку /config-repo
+          search-locations: ${CONFIG_LOCATION:file:../config-repo}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

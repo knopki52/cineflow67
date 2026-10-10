@@ -1,0 +1,111 @@
+# Маршрутизация Spring Cloud Gateway: каждый путь -> свой микросервис (через Eureka: lb://имя)
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: booking-ws
+          uri: lb:ws://booking-service
+          predicates: [ Path=/ws/** ]
+          filters: [ RemoveRequestHeader=Cookie ]
+
+        - id: movie-service
+          uri: lb://movie-service
+          predicates: [ "Path=/api/cities/**,/api/cinemas/**,/api/movies/**,/api/sessions/**" ]
+          filters:
+            - name: CircuitBreaker
+              args: { name: movieRoute, fallbackUri: forward:/fallback/movie-service }
+
+        - id: booking-service
+          uri: lb://booking-service
+          predicates: [ "Path=/api/booking/**,/api/tickets/**,/api/groups/**,/api/waitlist/**,/api/control/**,/api/admin/**,/api/assistant/**,/api/wrapped/**" ]
+          filters:
+            - name: CircuitBreaker
+              args: { name: bookingRoute, fallbackUri: forward:/fallback/booking-service }
+
+        - id: pricing-service
+          uri: lb://pricing-service
+          predicates: [ "Path=/api/pricing/**,/api/promos/**" ]
+          filters:
+            - name: CircuitBreaker
+              args: { name: pricingRoute, fallbackUri: forward:/fallback/pricing-service }
+
+        - id: payment-service
+          uri: lb://payment-service
+          predicates: [ "Path=/api/payments/**" ]
+          filters:
+            - name: CircuitBreaker
+              args: { name: paymentRoute, fallbackUri: forward:/fallback/payment-service }
+
+        - id: user-service
+          uri: lb://user-service
+          predicates: [ "Path=/api/users/**" ]
+          filters:
+            - name: CircuitBreaker
+              args: { name: userRoute, fallbackUri: forward:/fallback/user-service }
+
+        - id: concession-service
+          uri: lb://concession-service
+          predicates: [ "Path=/api/bar/**" ]
+          filters:
+            - name: CircuitBreaker
+              args: { name: barRoute, fallbackUri: forward:/fallback/concession-service }
+
+        # Обновление конфигурации «на лету» из админки: /ops/pricing-service/refresh -> POST /actuator/refresh
+        - id: ops
+          uri: lb://pricing-service
+          predicates: [ "Path=/ops/pricing-service/refresh" ]
+          filters: [ "SetPath=/actuator/refresh" ]
+
+        # Состояние Circuit Breaker'ов booking-service для живой панели в админке
+        - id: ops-booking-cb
+          uri: lb://booking-service
+          predicates: [ "Path=/ops/booking/circuitbreakers" ]
+          filters: [ "SetPath=/actuator/circuitbreakers" ]
+
+        # Документация каждого сервиса, собранная в одном Swagger UI
+        - id: docs-movie
+          uri: lb://movie-service
+          predicates: [ Path=/docs/movie/** ]
+          filters: [ "RewritePath=/docs/movie/(?<p>.*), /$\\{p}" ]
+        - id: docs-booking
+          uri: lb://booking-service
+          predicates: [ Path=/docs/booking/** ]
+          filters: [ "RewritePath=/docs/booking/(?<p>.*), /$\\{p}" ]
+        - id: docs-pricing
+          uri: lb://pricing-service
+          predicates: [ Path=/docs/pricing/** ]
+          filters: [ "RewritePath=/docs/pricing/(?<p>.*), /$\\{p}" ]
+        - id: docs-payment
+          uri: lb://payment-service
+          predicates: [ Path=/docs/payment/** ]
+          filters: [ "RewritePath=/docs/payment/(?<p>.*), /$\\{p}" ]
+        - id: docs-user
+          uri: lb://user-service
+          predicates: [ Path=/docs/user/** ]
+          filters: [ "RewritePath=/docs/user/(?<p>.*), /$\\{p}" ]
+        - id: docs-bar
+          uri: lb://concession-service
+          predicates: [ Path=/docs/bar/** ]
+          filters: [ "RewritePath=/docs/bar/(?<p>.*), /$\\{p}" ]
+        - id: docs-notification
+          uri: lb://notification-service
+          predicates: [ Path=/docs/notification/** ]
+          filters: [ "RewritePath=/docs/notification/(?<p>.*), /$\\{p}" ]
+
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 12s
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - { name: "🎬 movie-service", url: /docs/movie/v3/api-docs }
+      - { name: "🎟 booking-service", url: /docs/booking/v3/api-docs }
+      - { name: "💰 pricing-service", url: /docs/pricing/v3/api-docs }
+      - { name: "💳 payment-service", url: /docs/payment/v3/api-docs }
+      - { name: "👤 user-service", url: /docs/user/v3/api-docs }
+      - { name: "🍿 concession-service", url: /docs/bar/v3/api-docs }
+      - { name: "✉️ notification-service", url: /docs/notification/v3/api-docs }

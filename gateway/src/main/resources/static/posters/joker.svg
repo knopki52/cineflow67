@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B0F1A"/><stop offset="1" stop-color="#6B2D5C"/></linearGradient>
+<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.6"/></linearGradient></defs>
+<rect width="400" height="600" fill="url(#g)"/>
+<rect x="-20" y="560" width="440" height="42" fill="#3E1A38"/><rect x="16" y="518" width="440" height="42" fill="#4A2042"/><rect x="52" y="476" width="440" height="42" fill="#56264D"/><rect x="88" y="434" width="440" height="42" fill="#622C58"/><rect x="124" y="392" width="440" height="42" fill="#3E1A38"/><rect x="160" y="350" width="440" height="42" fill="#4A2042"/><rect x="196" y="308" width="440" height="42" fill="#56264D"/><rect x="232" y="266" width="440" height="42" fill="#622C58"/><rect x="268" y="224" width="440" height="42" fill="#3E1A38"/><rect x="304" y="182" width="440" height="42" fill="#4A2042"/><circle cx="270" cy="150" r="70" fill="#E8F27A" opacity="0.18"/><g transform="translate(240 170)"><circle r="16" fill="#2E8B57"/><rect x="-10" y="16" width="20" height="60" fill="#B22222"/></g>
+<rect width="400" height="600" fill="url(#fade)"/>
+<text x="28" y="44" font-family="Manrope, Arial, sans-serif" font-size="14" letter-spacing="2" fill="#FFF6E8" opacity="0.75">ТРИЛЛЕР · 2019</text>
+<text x="28" y="560" font-family="Unbounded, Arial Black, sans-serif" font-weight="800" font-size="32" fill="#FFF6E8">Джокер</text>
+</svg>

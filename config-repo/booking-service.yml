@@ -1,0 +1,46 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/booking_db
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 2000
+            read-timeout: 5000
+          # Оплата отвечает дольше 3 секунд -> таймаут -> Circuit Breaker
+          payment-service:
+            read-timeout: 3000
+
+booking:
+  hold-minutes: 5          # сколько держим место за зрителем
+  group-hold-minutes: 10   # совместный поход
+  waitlist-hold-minutes: 10
+  max-seats-per-user: 8
+
+# Circuit Breaker (Resilience4j) для вызовов других сервисов
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        minimum-number-of-calls: 4
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 15s
+        permitted-number-of-calls-in-half-open-state: 2
+        automatic-transition-from-open-to-half-open-enabled: true
+        register-health-indicator: true
+        ignore-exceptions:
+          - feign.FeignException$FeignClientException
+    instances:
+      movie: { base-config: default }
+      pricing: { base-config: default }
+      payment: { base-config: default }
+      concession: { base-config: default }
+      user: { base-config: default }
+      booking: { base-config: default }
+
